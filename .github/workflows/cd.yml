@@ -27,6 +27,8 @@ jobs:
     - name: Log in to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
+      env:
+        AWS_DEFAULT_REGION: ap-south-1
 
     - name: Build, tag, and push image to Amazon ECR
       env:
@@ -34,8 +36,8 @@ jobs:
         ECR_REPOSITORY: hello-world-app
         IMAGE_TAG: latest
       run: |
-        docker tag hello-world-app:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker tag hello-world-app:latest 150387322390.dkr.ecr.ap-south-1.amazonaws.com/hello-world-app:latest
+        docker push 150387322390.dkr.ecr.ap-south-1.amazonaws.com/hello-world-app:latest
 
     - name: Deploy to ECS
       env:
