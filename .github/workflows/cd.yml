@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      AWS_REGION: ap-south-1  # Setting the AWS region as an environment variable
+      AWS_REGION: ap-south-1\n  # Setting the AWS region as an environment variable
 
     steps:
     - name: Checkout code
