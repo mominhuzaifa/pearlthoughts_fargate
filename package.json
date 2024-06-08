@@ -1,24 +1,16 @@
 {
-  "name": "pearlthoughts_fargate",
+  "name": "hello-world-app",
   "version": "1.0.0",
-  "description": "this assessment from pearlthought for devops trainee solved by myself - momin huzaifa",
-  "main": "index.js",
+  "description": "A simple Node.js application",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mominhuzaifa/pearlthoughts_fargate.git"
-  },
-  "keywords": [],
-  "author": "",
+  "author": "Momin Huzaifa",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/mominhuzaifa/pearlthoughts_fargate/issues"
-  },
-  "homepage": "https://github.com/mominhuzaifa/pearlthoughts_fargate#readme",
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.17.1"
   }
 }
+
