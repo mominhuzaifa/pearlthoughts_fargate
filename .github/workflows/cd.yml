@@ -77,7 +77,7 @@ jobs:
         TASK_DEFINITION_FAMILY: hello-world-task
         TASK_DEFINITION_REVISION: latest
       run: |
-        echo "Updating ECS service with new task definition..."
+#        echo "Updating ECS service with new task definition..."
         aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --task-definition $TASK_DEFINITION_FAMILY:$TASK_DEFINITION_REVISION
 #    - name: Deploy to ECS
 #      env:
