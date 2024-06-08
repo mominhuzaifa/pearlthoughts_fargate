@@ -72,10 +72,23 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
         IMAGE_TAG: latest
-        ECR_REPOSITORY: hello-world-app
+        ECS_CLUSTER: hello-world-cluster
+        ECS_SERVICE: hello-world-service
+        TASK_DEFINITION_FAMILY: hello-world-task
+        TASK_DEFINITION_REVISION: latest
       run: |
         echo "Updating ECS service with new task definition..."
-        aws ecs update-service --cluster hello-world-cluster --service hello-world-service --force-new-deployment
+        aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --task-definition $TASK_DEFINITION_FAMILY:$TASK_DEFINITION_REVISION
+#    - name: Deploy to ECS
+#      env:
+#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#        AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
+#        IMAGE_TAG: latest
+#        ECR_REPOSITORY: hello-world-app
+#      run: |
+#        echo "Updating ECS service with new task definition..."
+#        aws ecs update-service --cluster hello-world-cluster --service hello-world-service --force-new-deployment
 
     - name: Start Node.js app
       run: npm start
