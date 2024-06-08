@@ -64,7 +64,7 @@ jobs:
         AWS_REGION: ${{ env.AWS_REGION }}
       run: |
         docker tag hello-world-app:latest 150387322390.dkr.ecr.ap-south-1.amazonaws.com/hello-world-app:latest
-        docker push 150387322390.dkr.ecr.ap-south-1.amazonaws.com/hello-world-app:latest
+#        docker push 150387322390.dkr.ecr.ap-south-1.amazonaws.com/hello-world-app:latest
 
     - name: Deploy to ECS
       env:
@@ -79,3 +79,4 @@ jobs:
 
     - name: Start Node.js app
       run: npm start
+
