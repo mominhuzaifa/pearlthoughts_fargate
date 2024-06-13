@@ -12,84 +12,79 @@ jobs:
       AWS_REGION: ap-south-1  # Setting the AWS region as an environment variable
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install dependencies
+        run: npm install
 
-    - name: Build Docker image
-      run: docker build -t hello-world-app .
+      - name: Build Docker image
+        run: docker build -t hello-world-app .
 
-    - name: Configure AWS CLI
-      run: |
-        aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-        aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-        aws configure set default.region $AWS_REGION
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_REGION: ${{ env.AWS_REGION }}
+      - name: Configure AWS CLI
+        run: |
+          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+          aws configure set default.region $AWS_REGION
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ env.AWS_REGION }}
 
-#    - name: Log in to Amazon ECR
-#      id: login-ecr
-#      uses: aws-actions/amazon-ecr-login@v1
-#      with:
-#        region: ${{ env.AWS_REGION }}
-#      env:
-#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#
-#    - name: Login to ECR (manual)
-#      run: |
-#        echo "Logging in to ECR..."
-#        aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin 150387322390.dkr.ecr.ap-south-1.amazonaws.com
-#      env:
-#        AWS_REGION: ${{ env.AWS_REGION }}
-#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      # Uncomment and configure the following steps if needed
 
-    - name: Build, tag, and push image to Amazon ECR
-      env:
-        ECR_REGISTRY: 150387322390.dkr.ecr.ap-south-1.amazonaws.com
-        ECR_REPOSITORY: hello-world-app
-        IMAGE_TAG: latest
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_REGION: ${{ env.AWS_REGION }}
-      run: |
-        docker tag hello-world-app:latest 150387322390.dkr.ecr.ap-south-1.amazonaws.com/hello-world-app:latest
-#        docker push 150387322390.dkr.ecr.ap-south-1.amazonaws.com/hello-world-app:latest
+      # - name: Log in to Amazon ECR
+      #   id: login-ecr
+      #   uses: aws-actions/amazon-ecr-login@v1
+      #   with:
+      #     region: ${{ env.AWS_REGION }}
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-    - name: Deploy to ECS
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
-        IMAGE_TAG: latest
-        ECS_CLUSTER: hello-world-cluster
-        ECS_SERVICE: hello-world-service
-        TASK_DEFINITION_FAMILY: hello-world-task
-        TASK_DEFINITION_REVISION: latest
-      run: |
-#        echo "Updating ECS service with new task definition..."
-        aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --task-definition $TASK_DEFINITION_FAMILY:$TASK_DEFINITION_REVISION
-#    - name: Deploy to ECS
-#      env:
-#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#        AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
-#        IMAGE_TAG: latest
-#        ECR_REPOSITORY: hello-world-app
-#      run: |
-#        echo "Updating ECS service with new task definition..."
-#        aws ecs update-service --cluster hello-world-cluster --service hello-world-service --force-new-deployment
+      # - name: Login to ECR (manual)
+      #   run: |
+      #     echo "Logging in to ECR..."
+      #     aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin 150387322390.dkr.ecr.ap-south-1.amazonaws.com
+      #   env:
+      #     AWS_REGION: ${{ env.AWS_REGION }}
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-    - name: Start Node.js app
-      run: npm start
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: 150387322390.dkr.ecr.ap-south-1.amazonaws.com
+          ECR_REPOSITORY: hello-world-app
+          IMAGE_TAG: latest
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ env.AWS_REGION }}
+        run: |
+          docker tag hello-world-app:latest 150387322390.dkr.ecr.ap-south-1.amazonaws.com/hello-world-app:latest
+          # Uncomment the line below to push the image
+          # docker push 150387322390.dkr.ecr.ap-south-1.amazonaws.com/hello-world-app:latest
 
+      - name: Deploy to ECS
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
+          IMAGE_TAG: latest
+          ECS_CLUSTER: hello-world-cluster
+          ECS_SERVICE: hello-world-service
+          TASK_DEFINITION_FAMILY: hello-world-task
+          TASK_DEFINITION_REVISION: latest
+        run: |
+          # Uncomment the line below to update the ECS service
+          # echo "Updating ECS service with new task definition..."
+          # aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --task-definition $TASK_DEFINITION_FAMILY:$TASK_DEFINITION_REVISION
+          # Alternatively, use the following command
+          # aws ecs update-service --cluster hello-world-cluster --service hello-world-service --force-new-deployment
+
+      - name: Start Node.js app
+        run: npm start
